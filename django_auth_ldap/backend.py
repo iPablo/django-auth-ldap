@@ -706,9 +706,11 @@ class _LDAPUserGroups(object):
         # avoid the cost of loading it.
         if self._group_dns is None:
             is_member = self._group_type.is_member(self._ldap_user, group_dn)
-
         if is_member is None:
-            is_member = (group_dn in self.get_group_dns())
+            for group in self.get_group_dns():
+                if group_dn in group:
+                    is_member = True
+                    break
 
         logger.debug("%s is%sa member of %s", self._ldap_user.dn,
                      is_member and " " or " not ", group_dn)

@@ -66,3 +66,8 @@ following is an example configuration, just to whet your appetite::
         'django_auth_ldap.backend.LDAPBackend',
         'django.contrib.auth.backends.ModelBackend',
     )
+
+
+# Example GroupsByBranchType
+
+AUTH_LDAP_GROUP_TYPE = GroupsByBranchType(base_group_cn='cn=base,dc=demo,dc=org')

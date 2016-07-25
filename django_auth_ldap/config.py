@@ -517,3 +517,19 @@ class NestedActiveDirectoryGroupType(NestedMemberDNGroupType):
     """
     def __init__(self, name_attr='cn'):
         super(NestedActiveDirectoryGroupType, self).__init__('member', name_attr)
+
+
+class GroupsByBranchType(LDAPGroupType):
+
+    def __init__(self, base_group_cn, name_attr='cn'):
+        self.base_group_cn = base_group_cn
+        self.name_attr = name_attr
+
+        super(GroupsByBranchType, self).__init__(name_attr)
+
+
+    def user_groups(self, ldap_user, group_search):
+        # Filter using uid for a lighter query
+        filters = '(uid=%s)' % ldap_user.attrs['uid'][0]
+        base_group_search = group_search.search_with_additional_term_string(filters)
+        return base_group_search.execute(ldap_user.connection)
