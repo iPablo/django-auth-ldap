@@ -56,7 +56,7 @@ import pprint
 import copy
 
 import django.db
-from django.contrib.auth.models import User, Group, Permission, SiteProfileNotAvailable
+from django.contrib.auth.models import User, Group, Permission
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 import django.dispatch
@@ -535,7 +535,7 @@ class _LDAPUser(object):
 
             if save_profile:
                 profile.save()
-        except (SiteProfileNotAvailable, ObjectDoesNotExist):
+        except ObjectDoesNotExist:
             logger.debug("Django user %s does not have a profile to populate", self._user.username)
 
     def _populate_profile_from_attributes(self, profile):
