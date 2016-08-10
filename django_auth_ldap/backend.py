@@ -167,7 +167,7 @@ class LDAPBackend(object):
         username is the Django-friendly username of the user. ldap_user.dn is
         the user's DN and ldap_user.attrs contains all of their LDAP attributes.
         """
-        return User.objects.get_or_create(username__iexact=username, defaults={'username': username.lower()})
+        return User.objects.get_or_create(email__iexact=username, defaults={'email': username.lower()})
 
     def ldap_to_django_username(self, username):
         return username
@@ -255,7 +255,6 @@ class _LDAPUser(object):
         User object if successful. Returns None on failure.
         """
         user = None
-
         try:
             self._authenticate_user_dn(password)
             self._check_requirements()
@@ -535,7 +534,7 @@ class _LDAPUser(object):
 
             if save_profile:
                 profile.save()
-        except ObjectDoesNotExist:
+        except:
             logger.debug("Django user %s does not have a profile to populate", self._user.username)
 
     def _populate_profile_from_attributes(self, profile):
