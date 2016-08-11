@@ -506,7 +506,13 @@ class _LDAPUser(object):
     def _populate_user_from_attributes(self):
         for field, attr in self.settings.USER_ATTR_MAP.iteritems():
             try:
-                setattr(self._user, field, self.attrs[attr][0])
+                if field == 'is_active':
+                    if self.attrs[attr][0] == 'active':
+                        setattr(self._user, field, True)
+                    else:
+                        setattr(self._user, field, False)
+                else:
+                    setattr(self._user, field, self.attrs[attr][0])
             except StandardError:
                 logger.warning("%s does not have a value for the attribute %s", self.dn, attr)
 
